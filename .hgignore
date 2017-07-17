@@ -1,0 +1,9 @@
+syntax: glob
+*.pyc
+*.orig
+*.egg*
+.venv
+.idea
+.cache
+build
+tests

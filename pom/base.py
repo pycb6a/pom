@@ -21,7 +21,7 @@ import logging
 import re
 
 from selenium import webdriver
-from six import text_type
+from six import string_types
 
 from pom import ui
 from pom import utils
@@ -94,7 +94,7 @@ class App(object):
         Args:
             page (page|str): page class or url string.
         """
-        url = page if isinstance(page, text_type) else page.url
+        url = page if isinstance(page, string_types) else page.url
         if not url.startswith('http'):
             url = self.app_url + url
         LOGGER.info('Open url {}'.format(url))

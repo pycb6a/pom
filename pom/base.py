@@ -21,6 +21,7 @@ import logging
 import re
 
 from selenium import webdriver
+from six import text_type
 
 from pom import ui
 from pom import utils
@@ -87,18 +88,35 @@ class App(object):
         LOGGER.info('Start {!r} browser'.format(browser))
         self.webdriver = browsers[browser](*args, **kwgs)
 
-    def open(self, url):
-        """Open web application URL.
+    def open(self, page):
+        """Open page or url.
 
         Args:
-            url (str): URL.
+            page (page|str): page class or url string.
         """
-        self.webdriver.get(self.app_url + url)
+        url = page if isinstance(page, text_type) else page.url
+        if not url.startswith('http'):
+            url = self.app_url + url
+        LOGGER.info('Open url {}'.format(url))
+        self.webdriver.get(url)
+
+    def flush_session(self):
+        """Delete all cookies.
+
+        It forces flushes user session by cookies deleting.
+        """
+        LOGGER.info('Delete all cookies')
+        self.webdriver.delete_all_cookies()
 
     def quit(self):
         """Close browser."""
         LOGGER.info('Close browser')
         self.webdriver.quit()
+
+    @property
+    def current_url(self):
+        """Get current URL."""
+        return self.webdriver.current_url
 
     @property
     def current_page(self):
@@ -110,9 +128,8 @@ class App(object):
         Raises:
             PomError: If current page is not defined.
         """
-        current_url = self.webdriver.current_url
         for page in self._registered_pages:
-            if re.match(self.app_url + page.url, current_url):
+            if re.match(self.app_url + page.url, self.current_url):
                 return getattr(self, utils.camel2snake(page.__name__))
         else:
             raise PomError("Can't define current page")

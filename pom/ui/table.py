@@ -51,14 +51,14 @@ class _CellsMixin(object):
             if element.is_displayed():
 
                 cell = self.cell_cls(locator[0], locator[1], index=index)
-                cell.container = self
+                cell.set_container(self)
                 _cells.append(cell)
 
         return _cells
 
     def cell(self, name):
         cell = self.cell_cls(By.XPATH, self._cell_selector(name))
-        cell.container = self
+        cell.set_container(self)
         return cell
 
     def _cell_selector(self, name):
@@ -79,7 +79,7 @@ class _RowsMixin(object):
             if element.is_displayed():
 
                 row = self.row_cls(locator[0], locator[1], index=index)
-                row.container = self
+                row.set_container(self)
                 _rows.append(row)
 
         return _rows
@@ -120,7 +120,7 @@ class Body(Block, _RowsMixin):
     def row(self, **kwgs):
         """Get row of table."""
         row = self.row_cls(By.XPATH, self._row_selector(**kwgs))
-        row.container = self
+        row.set_container(self)
         return row
 
     def _row_selector(self, **kwgs):
@@ -174,5 +174,5 @@ class List(Block, _RowsMixin):
         xpath = _merge_xpath(self.row_xpath,
                              'contains(., "{}")'.format(content))
         row = self.row_cls(By.XPATH, xpath)
-        row.container = self
+        row.set_container(self)
         return row

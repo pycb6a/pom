@@ -43,16 +43,15 @@ class ComboBox(UI):
             else:
                 raise
 
-    @value.setter
     @log
     @wait_for_presence
-    def value(self, value):
+    def set_value(self, value):
         """Set combobox value."""
-        if value in self.value:
+        if value == self.value:
             return
 
         for i, v in enumerate(self.values):
-            if value in v:
+            if value == v:
                 break
         else:
             raise Exception(

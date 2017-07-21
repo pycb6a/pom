@@ -272,9 +272,11 @@ class UI(object):
 
     def as_(self, cls):
         """Cast ui element to another class."""
-        return cls(self.locator[0],
-                   self.locator[1],
-                   index=self.index)
+        obj = cls(self.locator[0],
+                  self.locator[1],
+                  index=self.index)
+        obj.set_container(self.container)
+        return obj
 
     @utils.log
     def wait_for_presence(self, timeout=None):

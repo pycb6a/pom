@@ -168,9 +168,9 @@ class UI(object):
     def __repr__(self):
         """Object representation."""
         return self.__class__.__name__ + \
-            '(by={!r}'.format(self.locator[0]) + \
-            ', value={!r}'.format(self.locator[1]) + \
-            (')' if self.index is None else ', index={})'.format(self.index))
+               '(by={!r}'.format(self.locator[0]) + \
+               ', value={!r}'.format(self.locator[1]) + \
+               (')' if self.index is None else ', index={})'.format(self.index))
 
     @property
     def container(self):
@@ -269,6 +269,12 @@ class UI(object):
         return self.__class__(self.locator[0],
                               self.locator[1],
                               index=self.index)
+
+    def as_(self, cls):
+        """Cast ui element to another class."""
+        return cls(self.locator[0],
+                   self.locator[1],
+                   index=self.index)
 
     @utils.log
     def wait_for_presence(self, timeout=None):
